@@ -1,0 +1,17 @@
+{
+  "name": "search-movies",
+  "version": "0.0.0",
+  "description": "Webcomponent search-movies following open-wc recommendations",
+  "author": "search-movies",
+  "license": "MIT",
+  "scripts": {
+    "start": "es-dev-server --app-index index.html --node-resolve --open --watch"
+  },
+  "dependencies": {
+    "lit-html": "^1.0.0",
+    "lit-element": "^2.0.1"
+  },
+  "devDependencies": {
+    "es-dev-server": "^1.5.0"
+  }
+}

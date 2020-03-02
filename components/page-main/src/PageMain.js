@@ -15,9 +15,19 @@ export class PageMain extends LitElement {
             .wrapper-result-search{
                 width: 100%;
                 display: flex;
-                flex-direction = row;
-                flex-wrap: wrap;
-                justify-content: space-evenly;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .wrapper-list-fav {
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .card-result {
+                margin: 0 5px p 5px;
             }
         `;
     }
@@ -41,10 +51,7 @@ export class PageMain extends LitElement {
 
         this.localStorageFav = new LocalStorage('favorites');
         this.listMovies = [];
-        this.listFavorites = [];
-
-        console.log(Object.entries(this.localStorageFav.get()));
-        
+        this.listFavorites = Object.values(this.localStorageFav.get());
     }
 
     connectedCallback() {
@@ -72,10 +79,11 @@ export class PageMain extends LitElement {
 
             <div>
                 Mi lista
-
-                ${this.listFavorites.map(i => html`
-                    <card-element title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
-                `)}
+                <div class="wrapper-list-fav">
+                    ${this.listFavorites.map(i => html`
+                        <card-element title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
+                    `)}
+                </div>
             </div>
         `;
     }

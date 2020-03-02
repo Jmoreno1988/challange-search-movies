@@ -6,6 +6,7 @@ export class CardElement extends LitElement {
         return css`
             :host {
                 height: 260px;
+                margin: 0 5px 0 5px;
             }
 
             .wrapper-card {
@@ -15,6 +16,8 @@ export class CardElement extends LitElement {
             }
 
             .wrapper-img {
+                display: flex;
+                flex-direction: column;
                 min-height: 225px;
             }
 
@@ -26,7 +29,7 @@ export class CardElement extends LitElement {
                 width: 100%;
                 border-radius: 8px;
                 background: red;
-                height: 225px
+                height: 225px;
             }
 
             .title {
@@ -43,13 +46,12 @@ export class CardElement extends LitElement {
             }
 
             .marker {
-                position: absolute;
                 background: #B71C1C;
                 border-radius: 8px 0px 8px 0px;
-                width: 35px;
-                height: 35px;
-                margin: 180px 0 0 105px;
-                padding: 10px 0 0 10px;
+                margin: -46px 0 0 104px;
+                width: 26px;
+                height: 26px;
+                padding: 10px;
             }
 
             @media (min-width: 600px) {
@@ -64,8 +66,8 @@ export class CardElement extends LitElement {
         return html`
             <div class="wrapper-card">
                 <div class="wrapper-img">
-                    <icon-md class="marker" icon="heart-void" color:"#FFD600" @click="${this._toggleMovieFav}"></icon-md>
                     <img class="img" src="${this.urlImage}">
+                    <icon-md class="marker" icon="heart-void" color:"#FFD600" @click="${this._toggleMovieFav}"></icon-md>       
                 </div>
                 <div class="title">
                     ${this.title}

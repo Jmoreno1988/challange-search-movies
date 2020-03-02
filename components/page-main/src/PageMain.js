@@ -18,6 +18,8 @@ export class PageMain extends LitElement {
                 flex-direction: row;
                 flex-wrap: nowrap;
                 overflow-x: auto;
+                margin-left: 20px;
+
             }
 
             .wrapper-list-fav {
@@ -26,8 +28,18 @@ export class PageMain extends LitElement {
                 overflow-x: auto;
             }
 
+            .wrapper-my-list {
+                margin-left: 20px;
+            }
+
             .card-result {
                 margin: 0 5px p 5px;
+            }
+
+            .title {
+                font-size: 130%;
+                font-weight: bold;
+                line-height: 42px;
             }
         `;
     }
@@ -77,8 +89,8 @@ export class PageMain extends LitElement {
                 `)}
             </div>
 
-            <div>
-                Mi lista
+            <div class="wrapper-my-list">
+                <div class="title"> Mi lista </div>
                 <div class="wrapper-list-fav">
                     ${this.listFavorites.map(i => html`
                         <card-element title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
@@ -114,5 +126,7 @@ export class PageMain extends LitElement {
             if (ele)
                 this.localStorageFav.set(title, ele);
         }
+
+        this.listFavorites = Object.values(this.localStorageFav.get());
     }
 }

@@ -1,12 +1,11 @@
 import { html, css, LitElement } from 'lit-element';
 import { LocalStorage } from '../../search-movies/src/LocalStorage';
+import { InputElement } from '../../input-element/index';
 
 export class SearchInput extends LitElement {
     static get styles() {
         return css`
             :host {
-                --color-letter: #9E9E9E;
-                --border: 1px solid #BDBDBD;
                 width: 100%;
             }
 
@@ -17,40 +16,6 @@ export class SearchInput extends LitElement {
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-            }
-
-            .wrapper-input {
-                border: var(--border);
-                border-radius: 20px;
-                width: 85%;
-            }
-
-            .input {
-                width: 80%;
-                line-height: 30px;
-                font-size: 18px;
-                color: var(--color-letter);
-                margin-left: 40px;
-            }
-
-            .input:focus{
-                outline: none;
-            }
-
-            .input::placeholder {
-                color: var(--color-letter);
-            }
-
-            .list-old-searches {
-                width: 85%;
-                color: var(--color-letter);
-                display: flex;
-                flex-direction: column;
-            }
-
-            .list-old-item {
-                line-height: 34px;
-                padding-left: 50px;
             }
         `;
     }
@@ -72,27 +37,30 @@ export class SearchInput extends LitElement {
         this.localStorage = new LocalStorage('searches');
         this.listOldSearches = [];
         this.urlFailImage = 'https://www.labaleine.fr/sites/baleine/files/image-not-found.jpg';
+        this.msgPlaceholder = "Busca tu película";
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
+        document.addEventListener('new-value-input', this._handleNewValueInput.bind(this));
+        document.addEventListener('focus-input', this._handleFocusInput.bind(this)) ;
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener('new-value-input', () => { });
+        document.addEventListener('focus-input', () => {}) ;
+
+        super.disconnectedCallback();
     }
 
     render() {
         return html`
             <div class="search-input">
-                <div class="wrapper-input">
-                    <input 
-                        id="input-sea"
-                        type="text" 
-                        @focusin="${this._showOldSearchs}"
-                        placeholder="${this.placeholder}"
-                        class="input"
-                        @change=${(e) => this._newSearch(e.target.value)}"
-                    ></input>
-                </div>
-                
-                <div class="list-old-searches">
-                    ${this.listOldSearches.map(value => html`
-                        <div class="list-old-item" @click="${() => { this._handleOldSearch(value)}}">${value}</div>
-                    `)}
-                </div>
+                <input-element 
+                    placeholder="${this.msgPlaceholder}" 
+                    .listValues="${this.listOldSearches}"
+                ></input-element>
             </div>
             `;
     }
@@ -147,7 +115,7 @@ export class SearchInput extends LitElement {
     }
 
     _saveLocal(value, result) {
-        
+
         if (result.results)
             result.results.forEach(ele => {
                 if (ele['poster_path']) {
@@ -169,17 +137,23 @@ export class SearchInput extends LitElement {
         this._hiddenOldSearchs();
     }
 
+    _handleFocusInput() {
+        this._showOldSearchs();
+    }
+
     _showOldSearchs() {
         const items = this.localStorage.get();
-        const searches = [];
-
-        for (const i in items)
-            searches.push(i)
+        const searches = Object.keys(items);
 
         this.listOldSearches = searches;
     }
 
     _hiddenOldSearchs() {
         this.listOldSearches = [];
+    }
+
+    _handleNewValueInput(evt) {
+        if (evt.detail.value)
+            this._newSearch(evt.detail.value);
     }
 }

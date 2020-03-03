@@ -55,17 +55,17 @@ export class SearchMovies extends LitElement {
             case 'main':
                 return html`
                     <page-main .logo=${openWcLogo}></page-main>
-        `;
+                `;
             case 'pageOne':
                 return html`
-          <page-one></page-one>
-        `;
+                    <page-one></page-one>
+                `;
             case 'about':
                 return templateAbout;
             default:
                 return html`
-          <p>Page not found try going to <a href="#main">Main</a></p>
-        `;
+                    <p>Page not found try going to <a href="#main">Main</a></p>
+                `;
         }
     }
 

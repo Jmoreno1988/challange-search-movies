@@ -12,6 +12,7 @@ export class IconMd extends LitElement {
 
         this.icon = "";
         this.color = "white";
+        this.callback = () => {}
     }
 
     static get properties() {
@@ -49,7 +50,7 @@ export class IconMd extends LitElement {
             case 'menu':
                 svg = `<svg style="width:24px;height:24px;" viewBox="0 0 24 24"> <path fill="white" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /> </svg>`
                 break;
-            
+
             case 'mark':
                 svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="currentColor" d="M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z" /> </svg>';
                 break;
@@ -58,9 +59,17 @@ export class IconMd extends LitElement {
                 svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="tomato" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /> </svg>';
                 break;
 
-                case 'heart-void':
-                    svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="white" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /> </svg>';
-                    break;
+            case 'heart-void':
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="white" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /> </svg>';
+                break;
+
+            case 'close': 
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="white" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /> </svg>';
+                break;
+            
+            case 'add':
+                svg = '<svg style="width:36px;height:36px" viewBox="0 0 24 24"> <path fill="white" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /> </svg>';
+                break;
         }
 
         return svg;

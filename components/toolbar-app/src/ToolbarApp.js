@@ -30,7 +30,9 @@ export class ToolbarApp extends LitElement {
     }
 
     static get properties() {
-        return {};
+        return {
+            icon: { type: String }
+        };
     }
 
     render() {
@@ -39,10 +41,32 @@ export class ToolbarApp extends LitElement {
                 <div class="toolbar-item">
                     Logo
                 </div>
-                <div class="toolbar-item">
-                    <icon-md icon="menu" color="white"><icon-md>
-                </div>
+
+                ${this._iconToolbar()}
+                
             </div>
         `;
+    }
+
+    _iconToolbar() {
+        switch(this.icon) {
+            case 'menu':
+                return html`
+                    <div class="toolbar-item" @click="${this._openMenu}">
+                        <icon-md icon="menu" color="white"><icon-md>
+                    </div>`;
+            
+            case 'close': 
+                return html`
+                    <div class="toolbar-item" @click="${this._backToMain}">
+                        <icon-md icon="close" color="white"><icon-md>
+                    </div>`;
+        }
+    }
+
+    _openMenu() {}
+
+    _backToMain() {
+        document.dispatchEvent(new CustomEvent('click-in-close', {}));
     }
 }

@@ -41,6 +41,20 @@ export class PageMain extends LitElement {
                 font-weight: bold;
                 line-height: 42px;
             }
+
+            .fav-button {
+                width: 64px;
+                height: 64px;
+                background-color: #F44336;
+                border-radius: 50%;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                position: absolute;
+                botton: 0;
+                right: 0;
+                display:flex;
+                justify-content: center;
+                align-items: center;
+            }
         `;
     }
 
@@ -85,7 +99,7 @@ export class PageMain extends LitElement {
 
             <div class="wrapper-result-search">
                 ${this.listMovies.map(i => html`
-                    <card-element title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
+                    <card-element id="${i.id}" title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
                 `)}
             </div>
 
@@ -93,9 +107,13 @@ export class PageMain extends LitElement {
                 <div class="title"> Mi lista </div>
                 <div class="wrapper-list-fav">
                     ${this.listFavorites.map(i => html`
-                        <card-element title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
+                        <card-element id="${i.id}" title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
                     `)}
                 </div>
+            </div>
+
+            <div class="fav-button" @click="${this._openModalNewMovie}">
+                <icon-md icon="add" color="white"><icon-md>
             </div>
         `;
     }
@@ -128,5 +146,9 @@ export class PageMain extends LitElement {
         }
 
         this.listFavorites = Object.values(this.localStorageFav.get());
+    }
+
+    _openModalNewMovie() {
+        
     }
 }

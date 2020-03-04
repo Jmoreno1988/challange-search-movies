@@ -12,6 +12,8 @@ export class SearchMovies extends LitElement {
         return {
             title: { type: String },
             page: { type: String },
+            titleMovie: { type: String },
+            iconToolbar: { type: String }
         };
     }
 
@@ -25,19 +27,35 @@ export class SearchMovies extends LitElement {
                 width: 100%;
                 height: 56px;
             }
-    `;
+        `;
     }
 
     constructor() {
         super();
+
         this.page = 'main';
-        this.localStorage = new LocalStorage();
+        this.idMovie = "";
+        this.iconToolbar = 'menu';
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
+        document.addEventListener('click-in-card', this._handleClickInImg.bind(this));
+        document.addEventListener('click-in-close', this._handleClickClose.bind(this));
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener('click-in-card', () => { });
+        document.addEventListener('click-in-close', () => { });
+
+        super.disconnectedCallback();
     }
 
     render() {
         return html`
             <header>
-                <toolbar-app></toolbar-app>
+                <toolbar-app id="toolbar" icon="${this.iconToolbar}"></toolbar-app>
             </header>
 
             <main>
@@ -53,12 +71,17 @@ export class SearchMovies extends LitElement {
     _renderPage() {
         switch (this.page) {
             case 'main':
+                if (this._getNode('toolbar')) 
+                    this._getNode('toolbar').icon = 'menu';
+                
                 return html`
                     <page-main .logo=${openWcLogo}></page-main>
                 `;
             case 'pageOne':
+                this._getNode('toolbar').icon = 'close';
+
                 return html`
-                    <page-one></page-one>
+                    <page-one idMovie="${this.idMovie}"></page-one>
                 `;
             case 'about':
                 return templateAbout;
@@ -67,6 +90,21 @@ export class SearchMovies extends LitElement {
                     <p>Page not found try going to <a href="#main">Main</a></p>
                 `;
         }
+    }
+
+    _handleClickInImg(evt) {
+        if (!evt.detail.id) return;
+        
+        this.page = "pageOne";
+        this.idMovie = evt.detail.id;
+    }
+
+    _handleClickClose(evt) {
+        this.page = "main";
+    }
+
+    _getNode(id) {
+        return this.shadowRoot.getElementById(id);
     }
 
     __onNavClicked(ev) {

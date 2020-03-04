@@ -66,12 +66,14 @@ export class CardElement extends LitElement {
         return html`
             <div class="wrapper-card">
                 <div class="wrapper-img">
-                    <img class="img" src="${this.urlImage}">
+                    <img class="img" src="${this.urlImage}" @click="${this._handLeClickImg}">
                     <icon-md class="marker" icon="heart-void" color:"#FFD600" @click="${this._toggleMovieFav}"></icon-md>       
                 </div>
+
                 <div class="title">
                     ${this.title}
                 </div>
+
                 <div class="popularity">
                     <span class="wrapper-popu">${this.popularity}</span>  <vote-average id="vote-average" points="${this.totalStar}"></vote-average>
                 </div>
@@ -82,7 +84,8 @@ export class CardElement extends LitElement {
         return {
             title: { type: String },
             popularity: { type: Number },
-            urlImage: { type: String }
+            urlImage: { type: String },
+            id: { type: Number }
         };
     }
 
@@ -103,5 +106,13 @@ export class CardElement extends LitElement {
                 eleFavorite: this.title
             }
         }));
+    }
+
+    _handLeClickImg() {
+        document.dispatchEvent(new CustomEvent('click-in-card', {
+            detail: {
+                id: this.id
+            }
+        })); 
     }
 }

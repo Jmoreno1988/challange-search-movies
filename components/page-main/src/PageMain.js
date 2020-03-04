@@ -2,7 +2,8 @@ import { html, css, LitElement } from 'lit-element';
 import { LocalStorage } from '../../search-movies/src/LocalStorage';
 import { ToolbarApp } from '../../toolbar-app/toolbar-app.js';
 import { SearchInput } from '../../search-input/index.js';
-import { CardElement } from '../../card-element/index.js'
+import { CardElement } from '../../card-element/index.js';
+import { NewMovieModal } from '../../new-movie-modal/index.js';
 
 export class PageMain extends LitElement {
     static get styles() {
@@ -55,20 +56,28 @@ export class PageMain extends LitElement {
                 justify-content: center;
                 align-items: center;
             }
+
+            .modal {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, .5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         `;
     }
 
     static get properties() {
         return {
-            listMovies: {
-                type: Array,
-                value: []
-            },
+            listMovies: { type: Array },
 
-            listFavorites: {
-                type: Array,
-                value: []
-            }
+            listFavorites: { type: Array },
+
+            showModal: { type: Array}
         };
     }
 
@@ -78,6 +87,7 @@ export class PageMain extends LitElement {
         this.localStorageFav = new LocalStorage('favorites');
         this.listMovies = [];
         this.listFavorites = Object.values(this.localStorageFav.get());
+        this.showModal = false;
     }
 
     connectedCallback() {
@@ -85,6 +95,8 @@ export class PageMain extends LitElement {
 
         document.addEventListener('new-result-search', this._handleNewSearchResult.bind(this));
         document.addEventListener('toggle-fav', this._handleToggleFav.bind(this));
+        document.addEventListener('close-modal', this._closeModalNewMovie.bind(this));
+        document.addEventListener('update-list-fav', this._handleeUpdateListFav.bind(this));
     }
 
     disconnectedCallback() {
@@ -115,6 +127,14 @@ export class PageMain extends LitElement {
             <div class="fav-button" @click="${this._openModalNewMovie}">
                 <icon-md icon="add" color="white"><icon-md>
             </div>
+
+            ${this.showModal ? html`
+                <div class="modal">
+                    <new-movie-modal></new-movie-modal>
+                </div>
+            ` : html``}
+            
+            
         `;
     }
 
@@ -149,6 +169,14 @@ export class PageMain extends LitElement {
     }
 
     _openModalNewMovie() {
-        
+        this.showModal = true;
+    }
+
+    _closeModalNewMovie() {
+        this.showModal = false;
+    }
+
+    _handleeUpdateListFav() {
+        this.listFavorites = Object.values(this.localStorageFav.get());
     }
 }

@@ -87,7 +87,7 @@ export class ViewDetail extends LitElement {
         this.localStorageFav = new LocalStorage('favorites');
         this.localStorageSea = new LocalStorage('searches');
     }
-    
+
     render() {
         return html`
             <img src="${this.urlBackgroundImg}" class="img-back"></img>
@@ -122,18 +122,20 @@ export class ViewDetail extends LitElement {
     firstUpdated() {
         if (this._isCreateInLocal()) {
             this._updateMovieLocal();
-            return;
+        } else {
+            this._searchInfoMovie();
         }
+    }
 
+    _searchInfoMovie() {
         const movies = Object.values(this.localStorageFav.get());
         const movie = movies.find((element) => {
             if (element.id == this.idMovie)
                 return true;
         });
         const urlMovie = `${this.urlApi}/${movie.mediaType}/${this.idMovie}?api_key=${this.key}`;
-        const urlCast = `${this.urlApi}/${this.type}/${this.idMovie}/credits?api_key=${this.key}`;
-        
-        // TODO: refactor
+        const urlCast = `${this.urlApi}/${movie.mediaType}/${this.idMovie}/credits?api_key=${this.key}`;
+
         new Promise((resolve, reject) => {
             resolve(this._getInfo(urlMovie));
         }).then((res) => {
@@ -189,7 +191,7 @@ export class ViewDetail extends LitElement {
             if (element.id == this.idMovie && element.isLocal)
                 return true;
         });
-        
+
         this._updateMovie(ele, true);
     }
 
@@ -209,13 +211,13 @@ export class ViewDetail extends LitElement {
 
     _isCreateInLocal() {
         const movies = Object.values(this.localStorageFav.get());
-        
+
         const ele = movies.find((element) => {
             if (element.id == this.idMovie && element.isLocal)
                 return true;
         });
 
-        if (ele) 
+        if (ele)
             return true;
         return false;
     }

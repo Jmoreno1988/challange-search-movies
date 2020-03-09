@@ -125,7 +125,8 @@ export class NewMovieModal extends LitElement {
             posterPath: this.urlFailImage,
             voteAverage: this.average,
             overview: this.description,
-            releaseDate: date.toISOString().slice(0,10)
+            releaseDate: date.toISOString().slice(0,10),
+            isLocal: true
         });        
     }
 

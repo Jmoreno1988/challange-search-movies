@@ -28,7 +28,6 @@ export class CardElement extends LitElement {
             .img {
                 width: 100%;
                 border-radius: 8px;
-                background: red;
                 height: 225px;
             }
 
@@ -75,17 +74,18 @@ export class CardElement extends LitElement {
                 </div>
 
                 <div class="popularity">
-                    <span class="wrapper-popu">${this.popularity}</span>  <vote-average id="vote-average" points="${this.totalStar}"></vote-average>
+                    <span class="wrapper-popu">${this.popularity}</span>  
+                    <vote-average id="vote-average" points="${this.totalStar}"></vote-average>
                 </div>
             </div>`;
     }
 
     static get properties() {
         return {
+            id: { type: Number },
             title: { type: String },
             popularity: { type: Number },
             urlImage: { type: String },
-            id: { type: Number }
         };
     }
 

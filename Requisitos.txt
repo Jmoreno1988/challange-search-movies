@@ -1,0 +1,31 @@
+La aplicación, en el plano más funcional, deberá cumplir los siguientes requisitos:
+    - Búsqueda por nombre: tenemos que poder buscar la película o serie deseada para conocer en qué proveedor podemos verla, ya sea netflix, hbo, etc.
+    - Listado de coincidencias: una vez realicemos una búsqueda, el usuario debe poder ver una lista con todas las coincidencias existentes y el proveedor que la emite.
+    - Gestión de favoritos: el usuario debe poder gestionar sus pelis y series favoritas. Podrá hacerlo directamente desde el listado de coincidencias una vez hayamos realizado una búsqueda. Cada serie o película de la lista tendrá un icono con forma corazón que permitirá incluir o eliminar cada elemento del listado de favoritos. Las películas deben ser almacenadas en el navegador, ya sea utilizando LocalStorage o IndexedDB.
+    - Creación de favorito: si la peli o serie no aparece en ningún proveedor a través de la búsqueda, el usuario debe poder registrar como favorita su película introduciendo sus datos a mano. Esta funcionalidad se hará mediante un modal.
+    - Detalle de serie/peli: el usuario debe poder ver los detalles de una peli o serie al clicar en ella, en una pantalla nueva.
+    - Últimas búsquedas: debemos poner a disposición del usuario un listado con las 5 últimas búsquedas realizadas, de tal forma que si pulsamos sobre una de ellas, veremos directamente los resultados, sin tener que hacer una petición extra. Para esta funcionalidad no es necesaria la persistencia en el navegador de los datos.
+
+En el plano técnico, consulta con Usuario desconocido (eaguilar) cual es el stack tecnológico a usar.
+La aplicación deberá recoger la funcionalidad bajo las siguientes rutas:
+
+Los criterios de aceptación técnicos serán los siguientes:
+MUST:
+    - Mobile first.
+    - Diseño responsive, cumpliendo los diseños.
+    - Todo el código debe estar versionado utilizando GIT en un entorno local, utilizando metodología GIT FLOW (a excepción de mergeos mediante MR).
+    - No es posible utilizar librerías para gestionar los estilos.
+    + Cobertura de testing unitario de al menos el 80%.
+    - Cumplimiento de toda la funcionalidad propuesta en la definición funcional.
+    - La aplicación debe ser perfectamente utilizable sólo utilizando el teclado.
+    + Las métricas obtenidas con Lighthouse deben ser +80.
+    - Planteamiento del diseño técnico a nivel global de la SPA.
+DESIRED:
+    + Permitir la construcción de la SPA en 2 entornos: local y DEV.
+    - Habilitar CI con un repositorio de Innersource.
+    + Simular entorno en sandbox para poder consumir el API REST evitando el API real.
+    - Adaptar la SPA a PWA, siendo posible utilizar la aplicación offline. (no es posible utilizar librerías para esta funcionalidad)
+
+
+API:
+https://developers.themoviedb.org/3/getting-started/introduction

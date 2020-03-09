@@ -12,10 +12,6 @@ export class SearchInput extends LitElement {
             .search-input {
                 margin: 20px 0 20px 0;
                 width: 100%;
-                display:flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
             }
         `;
     }
@@ -31,7 +27,7 @@ export class SearchInput extends LitElement {
         super();
 
         this.urlApi = 'https://api.themoviedb.org/3/search/multi';
-        this.basePathImage = "https://image.tmdb.org/t/p/w500/"; 
+        this.basePathImage = "https://image.tmdb.org/t/p/w500/";
         this.key = '4744815b85d6cf6ddf142b0a72dc6013';
         this.includeAdult = false;
         this.localStorage = new LocalStorage('searches');
@@ -40,24 +36,31 @@ export class SearchInput extends LitElement {
         this.msgPlaceholder = "Busca tu película";
     }
 
-    connectedCallback() {
-        super.connectedCallback();
+    firstUpdated() {
+        this.shadowRoot.getElementById('input-element')
+            .addEventListener('new-value-input', this._handleNewValueInput.bind(this));
 
-        document.addEventListener('new-value-input', this._handleNewValueInput.bind(this));
-        document.addEventListener('focus-input', this._handleFocusInput.bind(this)) ;
+        this.shadowRoot.getElementById('input-element')
+            .addEventListener('focus-input', this._handleFocusInput.bind(this));
     }
 
     disconnectedCallback() {
-        document.removeEventListener('new-value-input', () => { });
-        document.addEventListener('focus-input', () => {}) ;
+        this.shadowRoot.getElementById('input-element')
+            .removeEventListener('new-value-input', () => { });
+
+        this.shadowRoot.getElementById('input-element')
+            .removeEventListener('focus-input', () => { });
 
         super.disconnectedCallback();
     }
+
+
 
     render() {
         return html`
             <div class="search-input">
                 <input-element 
+                    id="input-element"
                     placeholder="${this.msgPlaceholder}" 
                     .listValues="${this.listOldSearches}"
                 ></input-element>
@@ -72,8 +75,6 @@ export class SearchInput extends LitElement {
             return true;
         return false;
     }
-
-
 
     _newSearch(value) {
         if (this._isCached(value)) {
@@ -92,8 +93,9 @@ export class SearchInput extends LitElement {
                 if (response.ok) {
                     response.text().then((txt) => {
                         const result = JSON.parse(txt);
-                        this._saveLocal(value, result);
-                        this._sendResult(result);
+                        const movies = this._normalizeInfo(result.results);
+                        this._saveLocal(value, movies);
+                        this._sendResult(movies);
                     });
                 } else {
                     this._cleanResult([]);
@@ -115,17 +117,21 @@ export class SearchInput extends LitElement {
     }
 
     _saveLocal(value, result) {
-
-        if (result.results)
-            result.results.forEach(ele => {
-                if (ele['poster_path']) {
-                    ele['poster_path'] = this.basePathImage + ele['poster_path'];
-                } else {
-                    ele['poster_path'] = this.urlFailImage;
-                }
-            });
-              
         this.localStorage.set(value, result);
+    }
+
+    _normalizeInfo(elements) {
+        return elements.map(ele => {
+            return {
+                id: ele.id,
+                title: ele.title || ele.original_name,
+                voteAverage: ele.vote_average,
+                posterPath: ele.poster_path ? this.basePathImage + ele['poster_path'] : this.urlFailImage,
+                overview: ele.overview,
+                mediaType: ele.media_type,
+                backdropPath: ele.backdrop_path
+            };
+        });
     }
 
     _cleanResult() {

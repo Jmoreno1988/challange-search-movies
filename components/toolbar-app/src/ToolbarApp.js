@@ -43,7 +43,6 @@ export class ToolbarApp extends LitElement {
                 </div>
 
                 ${this._iconToolbar()}
-                
             </div>
         `;
     }

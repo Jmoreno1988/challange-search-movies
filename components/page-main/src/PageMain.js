@@ -26,7 +26,7 @@ export class PageMain extends LitElement {
             .wrapper-list-fav {
                 display: flex;
                 flex-direction: row;
-                overflow-x: auto;
+                flex-wrap: wrap;
             }
 
             .wrapper-my-list {
@@ -42,42 +42,13 @@ export class PageMain extends LitElement {
                 font-weight: bold;
                 line-height: 42px;
             }
-
-            .fav-button {
-                width: 64px;
-                height: 64px;
-                background-color: #F44336;
-                border-radius: 50%;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                position: absolute;
-                botton: 0;
-                right: 0;
-                display:flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .modal {
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, .5);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
         `;
     }
 
     static get properties() {
         return {
             listMovies: { type: Array },
-
-            listFavorites: { type: Array },
-
-            showModal: { type: Array}
+            listFavorites: { type: Array }
         };
     }
 
@@ -87,7 +58,6 @@ export class PageMain extends LitElement {
         this.localStorageFav = new LocalStorage('favorites');
         this.listMovies = [];
         this.listFavorites = Object.values(this.localStorageFav.get());
-        this.showModal = false;
     }
 
     connectedCallback() {
@@ -95,23 +65,24 @@ export class PageMain extends LitElement {
 
         document.addEventListener('new-result-search', this._handleNewSearchResult.bind(this));
         document.addEventListener('toggle-fav', this._handleToggleFav.bind(this));
-        document.addEventListener('close-modal', this._closeModalNewMovie.bind(this));
-        document.addEventListener('update-list-fav', this._handleeUpdateListFav.bind(this));
+        document.addEventListener('update-list-fav', this._handleUpdateListFav.bind(this));
     }
 
     disconnectedCallback() {
         document.removeEventListener('new-result-search', () => { });
+        document.removeEventListener('toggle-fav', () => { });
+        document.removeEventListener('update-list-fav', () => { });
 
         super.disconnectedCallback();
     }
 
     render() {
         return html`
-            <search-input placeholder="Busca tu película"></search-input>
+            <search-input></search-input>
 
             <div class="wrapper-result-search">
                 ${this.listMovies.map(i => html`
-                    <card-element id="${i.id}" title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
+                    <card-element id="${i.id}" title="${i.title}" popularity="${i.voteAverage}" urlImage="${i.posterPath}"></card-element>
                 `)}
             </div>
 
@@ -119,30 +90,19 @@ export class PageMain extends LitElement {
                 <div class="title"> Mi lista </div>
                 <div class="wrapper-list-fav">
                     ${this.listFavorites.map(i => html`
-                        <card-element id="${i.id}" title="${i.title}" popularity="${i.vote_average}" urlImage="${i.poster_path}"></card-element>
+                        <card-element id="${i.id}" title="${i.title}" popularity="${i.voteAverage}" urlImage="${i.posterPath}"></card-element>
                     `)}
                 </div>
             </div>
-
-            <div class="fav-button" @click="${this._openModalNewMovie}">
-                <icon-md icon="add" color="white"><icon-md>
-            </div>
-
-            ${this.showModal ? html`
-                <div class="modal">
-                    <new-movie-modal></new-movie-modal>
-                </div>
-            ` : html``}
-            
-            
         `;
     }
 
     _handleNewSearchResult(evt) {
-        if (evt.detail.searchResult && evt.detail.searchResult.results)
-            this.listMovies = evt.detail.searchResult.results;
+        
+        if (evt.detail.searchResult)
+            this.listMovies = evt.detail.searchResult;
         else
-            this.listMovies = [];
+            this.listMovies = [];   
     }
 
     _handleToggleFav(evt) {
@@ -156,27 +116,18 @@ export class PageMain extends LitElement {
             this.localStorageFav.setItem('favorites', listFav);
         } else {
             const ele = this.listMovies.find((ele) => {
-                if (ele['original_name'] == title || ele['original_title'] == title) {
+                if (ele.title == title) {
                     return ele;
                 }
             });
 
-            if (ele)
-                this.localStorageFav.set(title, ele);
+            if (ele) this.localStorageFav.set(title, ele);
         }
 
         this.listFavorites = Object.values(this.localStorageFav.get());
     }
 
-    _openModalNewMovie() {
-        this.showModal = true;
-    }
-
-    _closeModalNewMovie() {
-        this.showModal = false;
-    }
-
-    _handleeUpdateListFav() {
+    _handleUpdateListFav() {
         this.listFavorites = Object.values(this.localStorageFav.get());
     }
 }

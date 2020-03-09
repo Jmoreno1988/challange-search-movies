@@ -70,7 +70,27 @@ export class IconMd extends LitElement {
             case 'add':
                 svg = '<svg style="width:36px;height:36px" viewBox="0 0 24 24"> <path fill="white" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /> </svg>';
                 break;
-        }
+            
+            case 'clock':
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="#9E9E9E" d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" /> </svg>';
+                break;
+            
+            case 'house':
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="black" d="M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22L12 3Z" /> </svg>';
+                break;
+            
+            case 'play':
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="#9E9E9E" d="M8.5,8.64L13.77,12L8.5,15.36V8.64M6.5,5V19L17.5,12" /> </svg>';
+                break;
+            
+            case 'magnify':
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="#9E9E9E" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /> </svg>';
+                break;
+            
+            case 'download':
+                svg = '<svg style="width:24px;height:24px" viewBox="0 0 24 24"> <path fill="#9E9E9E" d="M13,5V11H14.17L12,13.17L9.83,11H11V5H13M15,3H9V9H5L12,16L19,9H15V3M19,18H5V20H19V18Z" /> </svg>';
+                break;
+            }
 
         return svg;
     }

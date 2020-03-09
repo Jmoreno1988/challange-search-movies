@@ -6,6 +6,8 @@ import '../../page-main/page-main.js';
 import '../../page-one/page-one.js';
 import { templateAbout } from './templateAbout.js';
 import { LocalStorage } from './LocalStorage.js';
+import { FooterBar } from '../../footer-bar/index.js';
+import { NewMovieModal } from '../../new-movie-modal/index.js';
 
 export class SearchMovies extends LitElement {
     static get properties() {
@@ -13,19 +15,55 @@ export class SearchMovies extends LitElement {
             title: { type: String },
             page: { type: String },
             titleMovie: { type: String },
-            iconToolbar: { type: String }
+            iconToolbar: { type: String },
+            showModalNewMovie: { type: Boolean }
         };
     }
 
     static get styles() {
         return css`
             :host {
-                background: red;
+                width:100%; 
+                height:100%; 
+                display: flex; 
+                flex-direction: column;
             }
 
             header {
+                height: 64px;
+                z-index: 2;
+            }
+
+            main {
+                flex: 1; 
+                display:flex; 
+                overflow-y: auto;
+            }
+
+            .wrapper-render-page {
+                overflow-y: auto;
+                z-index: 1;
+                width:100%;
+                margin-bottom:30px;
+            }
+
+            footer {
+                height: 64px;
+                box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+                z-index: 2;
+            }
+
+            .modal {
+                position: absolute;
+                top: 0px;
+                left: 0px;
                 width: 100%;
-                height: 56px;
+                height: 100%;
+                background: rgba(0, 0, 0, .5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index:10;
             }
         `;
     }
@@ -36,18 +74,23 @@ export class SearchMovies extends LitElement {
         this.page = 'main';
         this.idMovie = "";
         this.iconToolbar = 'menu';
+        this.showModalNewMovie = false;
     }
 
-    connectedCallback() {
-        super.connectedCallback();
-
+    firstUpdated() {
         document.addEventListener('click-in-card', this._handleClickInImg.bind(this));
         document.addEventListener('click-in-close', this._handleClickClose.bind(this));
+        document.addEventListener('close-modal-movie', this._handleCloseModalNewMovie.bind(this));
+        this.shadowRoot.getElementById('footer-bar')
+            .addEventListener('open-modal-movie', this._handleOpenModalNewMovie.bind(this));
     }
 
     disconnectedCallback() {
         document.removeEventListener('click-in-card', () => { });
-        document.addEventListener('click-in-close', () => { });
+        document.removeEventListener('click-in-close', () => { });
+        document.removeEventListener('close-modal-movie', this._handleCloseModalNewMovie.bind(this));
+        this.shadowRoot.getElementById('footer-bar')
+            .removeEventListener('open-modal-movie', this._handleOpenModalNewMovie.bind(this));
 
         super.disconnectedCallback();
     }
@@ -59,12 +102,20 @@ export class SearchMovies extends LitElement {
             </header>
 
             <main>
-                ${this._renderPage()}
+                <div class="wrapper-render-page">
+                    ${this._renderPage()}
+                </div>
             </main>
-
+            
             <footer>
-
+                <footer-bar id="footer-bar"></footer-bar>
             </footer>
+
+            ${ this.showModalNewMovie ? html`
+                <div class="modal" >
+                    <new-movie-modal></new-movie-modal>
+                </div>
+            ` : html`` }
         `;
     }
 
@@ -101,6 +152,14 @@ export class SearchMovies extends LitElement {
 
     _handleClickClose(evt) {
         this.page = "main";
+    }
+
+    _handleOpenModalNewMovie() {
+        this.showModalNewMovie = true;
+    }
+
+    _handleCloseModalNewMovie() {
+        this.showModalNewMovie = false;
     }
 
     _getNode(id) {
